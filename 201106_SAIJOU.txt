@@ -1,0 +1,35 @@
+# お題１：（ワンライナー）
+# 遺伝子のtype（ refFlat.GRCh38.gene.name.txt  １３行目）ごとの遺伝子数を出力。
+
+cut -f13 refFlat.GRCh38.gene.name.txt | sort | uniq -c
+
+# または
+cat refFlat.GRCh38.gene.name.txt | awk '{print $13}' | sort | uniq -c
+
+# chrXについて、typeごとの遺伝子数を出力。
+cat refFlat.GRCh38.gene.name.txt | grep chrX | awk '{print $13}' | sort | uniq -c
+
+
+# お題２：染色体１番かつexon数が10以上の遺伝子だけを出力するワンライナー。
+cat refFlat.GRCh38.gene.name.txt | grep chr1 | awk '{if ($9>=10){print}}'
+
+
+# お題３： refFlat.hg38.txtを入力として染色体別のファイル（chr1~chr22, chrX,Y）を作成するシェルスクリプトを作成する。
+ChromosomeSeparation.sh
+
+#!/bin/sh
+
+mkdir -p chromosome
+
+for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+
+do
+
+  cat refFlat.hg38.txt | grep chr${i} >> chromosome/refFlat.hg38.chr${i}.txt
+
+done
+# お題４：UCSCで重複するID, Ensemblで重複する遺伝子名を抽出し、どのような内容になっているのか調査。（二人で分担）
+
+cat refFlat.GRCh38.gene.name.txt | awk '{print $1}'| sort | uniq -d > refFlat.GRCh38.gene.name.duplicate.txt
+
+cat refFlat.hg38.txt | awk '{print $2}'| sort | uniq -d > refFlat.hg38.duplicate.txt
