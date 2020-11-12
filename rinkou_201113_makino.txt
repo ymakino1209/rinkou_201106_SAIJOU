@@ -1,0 +1,27 @@
+# 1-1
+cut -f13 refFlat.GRCh38.gene.name.txt | sort | uniq -c
+
+# 1-2
+cat refFlat.GRCh38.gene.name.txt | awk '{if($3 == "chrX"){print $13}}' | sort | uniq -c
+cat refFlat.GRCh38.gene.name.txt | grep "chrX" | cut -f13 | sort | uniq -c
+
+
+# 2
+cat refFlat.GRCh38.gene.name.txt | awk '{if($3 == "chr1" && $9 >= 10){print}}' | tail
+
+
+
+# 3
+bash rinkou_201113_makino_task3.sh refFlat.GRCh38.gene.name.txt
+
+# 4
+cut -f1 refFlat.GRCh38.gene.name.txt | sort | uniq -d > refFlat.GRCh38.gene.name.duplicate.txt
+cut -f1 refFlat.hg38.txt | sort | uniq -d > refFlat.hg38.duplicate.txt
+
+cat refFlat.GRCh38.gene.name.txt  | grep -w RF00001
+
+wc -l refFlat.GRCh38.gene.name.duplicated.txt
+wc -l refFlat.hg38.duplicated.txt
+
+wc -l refFlat.GRCh38.gene.name.txt
+wc -l refFlat.hg38.txt
