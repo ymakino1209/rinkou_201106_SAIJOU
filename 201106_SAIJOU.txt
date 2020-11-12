@@ -11,7 +11,8 @@ cat refFlat.GRCh38.gene.name.txt | grep chrX | awk '{print $13}' | sort | uniq -
 
 
 # お題２：染色体１番かつexon数が10以上の遺伝子だけを出力するワンライナー。
-cat refFlat.GRCh38.gene.name.txt | grep chr1 | awk '{if ($9>=10){print}}'
+cat refFlat.GRCh38.gene.name.txt | grep -w chr1 | awk '{if ($9>=10){print}}'
+# grep -wオプションで、完全一致を検索（chr11などは含まれなくなる）
 
 
 # お題３： refFlat.hg38.txtを入力として染色体別のファイル（chr1~chr22, chrX,Y）を作成するシェルスクリプトを作成する。
@@ -21,15 +22,24 @@ ChromosomeSeparation.sh
 
 mkdir -p chromosome
 
-for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+# for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+# 1から22までを 'seq 22'で表現するとスマート
+
+for i in `seq 22` X Y
 
 do
 
-  cat refFlat.hg38.txt | grep chr${i} >> chromosome/refFlat.hg38.chr${i}.txt
+  cat refFlat.hg38.txt | grep -w chr${i} > chromosome/refFlat.hg38.chr${i}.txt
 
 done
+
 # お題４：UCSCで重複するID, Ensemblで重複する遺伝子名を抽出し、どのような内容になっているのか調査。（二人で分担）
 
 cat refFlat.GRCh38.gene.name.txt | awk '{print $1}'| sort | uniq -d > refFlat.GRCh38.gene.name.duplicate.txt
 
 cat refFlat.hg38.txt | awk '{print $2}'| sort | uniq -d > refFlat.hg38.duplicate.txt
+
+# UCSCの方は、スプライシングバリアントなども含むため、重複がとても多い
+# Ensemblの方は、代表を抜き出しているため、重複は少ない
+# それでも残る重複は、5s rRNAやU7 snRNAなどのRNAとして機能する遺伝子がほとんど
+# 実際には異なる染色体から転写されるものの、遺伝子名としては同一となっている

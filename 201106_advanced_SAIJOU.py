@@ -46,8 +46,8 @@ NIPBL_UCSC_df
 
 
 # exonStartsごとに、","で分割してみる。仮の"SplitStars"に値を入力。
-NIPBL_UCSC_df["SplitStars"] = NIPBL_UCSC_df["exonStarts"].str.split(",")
-NIPBL_UCSC_df["SplitStars"] 
+NIPBL_UCSC_df["SplitStarts"] = NIPBL_UCSC_df["exonStarts"].str.split(",")
+NIPBL_UCSC_df["SplitStarts"] 
 
 
 # In[5]:
@@ -62,7 +62,7 @@ NIPBL_UCSC_df["SplitEnds"]
 
 
 # exon1の開始点は.str.get(0)で取得できる
-NIPBL_UCSC_df["exon1"] = NIPBL_UCSC_df["SplitStars"].str.get(0)
+NIPBL_UCSC_df["exon1"] = NIPBL_UCSC_df["SplitStarts"].str.get(0)
 NIPBL_UCSC_df["exon1"]
 
 
@@ -70,7 +70,7 @@ NIPBL_UCSC_df["exon1"]
 
 
 # exon2の開始点は.str.get(1)で取得できる
-NIPBL_UCSC_df["exon2"] = NIPBL_UCSC_df["SplitStars"].str.get(1)
+NIPBL_UCSC_df["exon2"] = NIPBL_UCSC_df["SplitStarts"].str.get(1)
 NIPBL_UCSC_df["exon2"]
 
 
@@ -88,7 +88,7 @@ print(NIPBL_UCSC_df.at[19085, 'exonCount'])
 
 for i in range((NIPBL_UCSC_df.at[19086, 'exonCount'])): #19086行のほうが多いのでこちらを使用
     print ("exon"+ str (i+1))
-    print(NIPBL_UCSC_df["SplitStars"].str.get(i) + "-" + NIPBL_UCSC_df["SplitEnds"].str.get(i))
+    print(NIPBL_UCSC_df["SplitStarts"].str.get(i) + "-" + NIPBL_UCSC_df["SplitEnds"].str.get(i))
 
 
 # - 最低限こなしたが
@@ -110,14 +110,14 @@ Ensembl
 
 
 Ensembl_s = Ensembl.sort_values(['type']) # typeごとにソートする
-grouped = Ensembl_s[["type", "exonCount"]] # 必要な部分のみ取り出す
-grouped
+df = Ensembl_s[["type", "exonCount"]] # 必要な部分のみ取り出す
+df
 
 
 # In[12]:
 
 
-grouped.hist(by="type", figsize=(60, 40))
+df.hist(by="type", figsize=(60, 40))
 
 
 # - 最低限こなしたが
